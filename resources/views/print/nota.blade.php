@@ -1,9 +1,7 @@
 <html moznomarginboxes mozdisallowselectionprint>
 
 <head>
-    <title>
-        Nota Pembelian
-    </title>
+    <title>Nota Pembelian</title>
     <style type="text/css">
         html {
             font-family: "Verdana";
@@ -145,12 +143,12 @@
             <tr>
                 <td>KASIR</td>
                 <td>:</td>
-                <td>{{ $transaction->cashier->name ?? '' }}</td>
+                <td>{{ $transaction->cashier->name ?? 'N/A' }}</td> <!-- Fallback for cashier name -->
             </tr>
             <tr>
                 <td>PEMBELI</td>
                 <td>:</td>
-                <td>{{ $transaction->customer->name ?? 'Umum' }}</td>
+                <td>{{ $transaction->customer->name ?? 'Umum' }}</td> <!-- Fallback for customer name -->
             </tr>
         </table>
 
@@ -183,7 +181,7 @@
                         <div class="separate-line" style="border-top: 1px dashed #000;"></div>
                     </td>
                 </tr>
-                @foreach ($transaction->details()->get() as $item)
+                @foreach ($transaction->details as $item) <!-- Avoid unnecessary method call -->
                 <tr>
                     <td class='name'>{{ $item->product->title }}</td>
                     <td class='qty' style='text-align: center'>{{ $item->qty }}</td>
