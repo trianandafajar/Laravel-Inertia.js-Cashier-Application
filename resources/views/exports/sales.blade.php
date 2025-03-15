@@ -10,7 +10,7 @@
     </div>
 </div>
 
-<table style="width: 100%;">
+<table style="width: 100%; border-collapse: collapse;">
     <thead>
         <tr style="background-color: #e6e6e7;">
             <th scope="col">Date</th>
@@ -23,16 +23,16 @@
     <tbody>
         @foreach($sales as $sale)
         <tr>
-            <td>{{ $sale->created_at }}</td>
+            <td>{{ \Carbon\Carbon::parse($sale->created_at)->format('d M Y H:i') }}</td> <!-- Format date -->
             <td>{{ $sale->invoice }}</td>
-            <td>{{ $sale->cashier->name ?? '' }}</td>
-            <td>{{ $sale->customer->name ?? 'Umum' }}</td>
+            <td>{{ $sale->cashier->name ?? 'N/A' }}</td> <!-- Fallback if cashier is null -->
+            <td>{{ $sale->customer->name ?? 'Umum' }}</td> <!-- Fallback if customer is null -->
             <td class="text-end">{{ formatPrice($sale->grand_total) }}</td>
         </tr>
         @endforeach
         <tr style="background-color: #e6e6e7;">
-            <td colspan="4" class="text-end fw-bold">TOTAL</td>
-            <td class="text-end fw-bold">{{ formatPrice($total) }}</td>
+            <td colspan="4" style="text-align: right; font-weight: bold;">TOTAL</td>
+            <td style="text-align: right; font-weight: bold;">{{ formatPrice($total) }}</td>
         </tr>
     </tbody>
 </table>
