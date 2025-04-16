@@ -1,21 +1,19 @@
-<div class="title" style="padding-bottom: 13px;">
-    <div style="text-align: center; text-transform: uppercase; font-size: 15px;">
-        Triananda Fajar Ramadhan
-    </div>
-    <div style="text-align: center;">
-        Alamat: Desa Kedungombo, Kec. Tengaran, Kab. Semarang
-    </div>
-    <div style="text-align: center;">
+<!-- Header -->
+<div class="title" style="padding-bottom: 13px; text-align: center; font-size: 15px; text-transform: uppercase;">
+    Triananda Fajar Ramadhan
+    <div style="font-size: 10px; text-transform: none;">
+        Alamat: Desa Kedungombo, Kec. Tengaran, Kab. Semarang<br>
         Telp: 0857-9087-9087
     </div>
 </div>
 
-<table style="width: 100%;">
+<!-- Tabel Laporan -->
+<table style="width: 100%; font-size: 10px; border-collapse: collapse;">
     <thead>
         <tr style="background-color: #e6e6e7;">
-            <th scope="col">Date</th>
-            <th scope="col">Invoice</th>
-            <th scope="col">Total</th>
+            <th align="left">Date</th>
+            <th align="left">Invoice</th>
+            <th align="right">Total</th>
         </tr>
     </thead>
     <tbody>
@@ -23,12 +21,14 @@
         <tr>
             <td>{{ $profit->created_at }}</td>
             <td>{{ $profit->transaction->invoice }}</td>
-            <td class="text-end">{{ formatPrice($profit->total) }}</td>
+            <td align="right">{{ formatPrice($profit->total) }}</td>
         </tr>
         @endforeach
-        <tr style="background-color: #e6e6e7;">
-            <td colspan="2" class="text-end fw-bold">TOTAL</td>
-            <td class="text-end fw-bold">{{ formatPrice($total) }}</td>
+
+        <!-- Total -->
+        <tr style="background-color: #e6e6e7; font-weight: bold;">
+            <td colspan="2" align="right">TOTAL</td>
+            <td align="right">{{ formatPrice($total) }}</td>
         </tr>
     </tbody>
 </table>
