@@ -1,271 +1,175 @@
-<html moznomarginboxes mozdisallowselectionprint>
-
+<!doctype html>
+<html lang="id" moznomarginboxes mozdisallowselectionprint>
 <head>
-    <title>Nota Pembelian</title>
-    <style type="text/css">
-        html {
-            font-family: "Verdana";
-        }
+  <meta charset="UTF-8" />
+  <title>Nota Pembelian</title>
+  <style>
+    html {
+      font-family: "Verdana";
+    }
 
-        .content {
-            width: 80mm;
-            font-size: 10px;
-            padding: 20px;
-        }
+    .content {
+      width: 80mm;
+      font-size: 10px;
+      padding: 20px;
+    }
 
-        .content .title {
-            text-align: center;
-        }
+    .title {
+      text-align: center;
+      text-transform: uppercase;
+      font-size: 15px;
+      padding-bottom: 13px;
+    }
 
-        .content .head-desc {
-            margin-top: 10px;
-            display: table;
-            width: 100%;
-        }
+    .head-desc {
+      margin-top: 10px;
+      display: table;
+      width: 100%;
+    }
 
-        .content .head-desc>div {
-            display: table-cell;
-        }
+    .head-desc > div {
+      display: table-cell;
+    }
 
-        .content .head-desc .user {
-            text-align: right;
-        }
+    .head-desc .user {
+      text-align: right;
+    }
 
-        .content .nota {
-            text-align: center;
-            margin-top: 5px;
-            margin-bottom: 5px;
-        }
+    .nota {
+      text-align: center;
+      margin: 5px 0;
+    }
 
-        .content .separate {
-            margin-top: 10px;
-            margin-bottom: 15px;
-            border-top: 1px dashed #000;
-        }
+    .separate-line {
+      border-top: 1px dashed #000;
+      height: 1px;
+      margin: 5px 0;
+    }
 
-        .content .transaction-table {
-            width: 100%;
-            font-size: 10px;
-        }
+    .transaction-table {
+      width: 100%;
+      font-size: 10px;
+      border-collapse: collapse;
+    }
 
-        .content .transaction-table .name {
-            /*//width: 185px;*/
-        }
+    .transaction-table td {
+      vertical-align: top;
+      padding: 2px 0;
+    }
 
-        .content .transaction-table .qty {
-            /*//text-align: center;*/
-            /*width: 65px;*/
-        }
+    .transaction-table .qty {
+      text-align: center;
+    }
 
-        .content .transaction-table .sell-price {
-            /*//text-align: right;*/
-            width: 65px;
-            text-align: right;
-        }
+    .transaction-table .sell-price,
+    .transaction-table .final-price {
+      text-align: right;
+    }
 
-        .content .transaction-table .final-price {
-            text-align: right;
-        }
+    .price-tr td,
+    .discount-tr td {
+      padding: 7px 0;
+    }
 
-        .content .transaction-table tr td {
-            vertical-align: top;
-        }
+    .thanks {
+      margin-top: 25px;
+      text-align: center;
+    }
 
-        .content .transaction-table .price-tr td {
-            padding-top: 7px;
-            padding-bottom: 7px;
-        }
+    .azost {
+      margin-top: 5px;
+      text-align: center;
+      font-size: 10px;
+    }
 
-        .content .transaction-table .discount-tr td {
-            padding-top: 7px;
-            padding-bottom: 7px;
-        }
+    @media print {
+      @page {
+        width: 80mm;
+        margin: 0mm;
+      }
+    }
+  </style>
 
-        .content .transaction-table .separate-line {
-            height: 1px;
-            border-top: 1px dashed #000;
-        }
-
-        .content .thanks {
-            margin-top: 25px;
-            text-align: center;
-        }
-
-        .content .azost {
-            margin-top: 5px;
-            text-align: center;
-            font-size: 10px;
-        }
-
-        @media print {
-            @page {
-                width: 80mm;
-                margin: 0mm;
-            }
-        }
-    </style>
-    <script>
-        window.print();
-        window.onafterprint = function() {
-            setTimeout(function() {
-                window.close();
-            }, 1000);
-        }
-    </script>
+  <script>
+    window.print();
+    window.onafterprint = () => {
+      setTimeout(() => window.close(), 1000);
+    };
+  </script>
 </head>
 
 <body>
-    <div class="content">
-        <div class="title" style="padding-bottom: 13px">
-            <div style="text-align: center;text-transform: uppercase;font-size: 15px">
-                Triananda Fajar Ramadhan
-            </div>
-            <div style="text-align: center">
-                Alamat: Desa Gedangalas, Kec. Gajah, Kab. Demak
-            </div>
-            <div style="text-align: center">
-                Telp: 0857-9087-9089
-            </div>
-        </div>
-
-        <div class="separate-line" style="border-top: 1px dashed #000;height: 1px;margin-bottom: 5px"></div>
-        <table class="transaction-table" cellspacing="0" cellpadding="0">
-            <tr>
-                <td>TANGGAL</td>
-                <td>:</td>
-                <td>{{ $transaction->created_at }}</td>
-            </tr>
-            <tr>
-                <td>FAKTUR</td>
-                <td>:</td>
-                <td>{{ $transaction->invoice }}</td>
-            </tr>
-            <tr>
-                <td>KASIR</td>
-                <td>:</td>
-                <td>{{ $transaction->cashier->name ?? 'N/A' }}</td> <!-- Fallback for cashier name -->
-            </tr>
-            <tr>
-                <td>PEMBELI</td>
-                <td>:</td>
-                <td>{{ $transaction->customer->name ?? 'Umum' }}</td> <!-- Fallback for customer name -->
-            </tr>
-        </table>
-
-        <div class="transaction">
-            <table class="transaction-table" cellspacing="0" cellpadding="0">
-                <tr class="price-tr">
-                    <td colspan="3">
-                        <div class="separate-line" style="border-top: 1px dashed #000;"></div>
-                    </td>
-                    <td colspan="3">
-                        <div class="separate-line" style="border-top: 1px dashed #000;"></div>
-                    </td>
-                    <td colspan="3">
-                        <div class="separate-line" style="border-top: 1px dashed #000;"></div>
-                    </td>
-                </tr>
-                <tr>
-                    <td style="text-align: left">PRODUK</td>
-                    <td style="text-align: center">QTY</td>
-                    <td style="text-align: right" colspan="5">HARGA</td>
-                </tr>
-                <tr class="price-tr">
-                    <td colspan="3">
-                        <div class="separate-line" style="border-top: 1px dashed #000;"></div>
-                    </td>
-                    <td colspan="3">
-                        <div class="separate-line" style="border-top: 1px dashed #000;"></div>
-                    </td>
-                    <td colspan="3">
-                        <div class="separate-line" style="border-top: 1px dashed #000;"></div>
-                    </td>
-                </tr>
-                @foreach ($transaction->details as $item) <!-- Avoid unnecessary method call -->
-                <tr>
-                    <td class='name'>{{ $item->product->title }}</td>
-                    <td class='qty' style='text-align: center'>{{ $item->qty }}</td>
-                    <td class='final-price' style='text-align: right' colspan="5">{{ formatPrice($item->price) }}</td>
-                </tr>
-                @endforeach
-                <tr class="price-tr">
-                    <td colspan="3">
-                        <div class="separate-line"></div>
-                    </td>
-                    <td colspan="3">
-                        <div class="separate-line"></div>
-                    </td>
-                    <td colspan="3">
-                        <div class="separate-line"></div>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="3" class="final-price">
-                        SUB TOTAL
-                    </td>
-                    <td colspan="3" class="final-price">
-                        :
-                    </td>
-                    <td class="final-price">
-                        {{ formatPrice($transaction->grand_total) }}
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="3" class="final-price">
-                        DISKON
-                    </td>
-                    <td colspan="3" class="final-price">
-                        :
-                    </td>
-                    <td class="final-price">
-                        {{ formatPrice($transaction->discount) }}
-                    </td>
-                </tr>
-
-                <tr class="discount-tr">
-                    <td colspan="3">
-                        <div class="separate-line"></div>
-                    </td>
-                    <td colspan="3">
-                        <div class="separate-line"></div>
-                    </td>
-                    <td colspan="3">
-                        <div class="separate-line"></div>
-                    </td>
-                </tr>
-
-                <tr>
-                    <td colspan="3" class="final-price">
-                        TUNAI
-                    </td>
-                    <td colspan="3" class="final-price">
-                        :
-                    </td>
-                    <td class="final-price">
-                        {{ formatPrice($transaction->cash) }}
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="3" class="final-price">
-                        KEMBALI
-                    </td>
-                    <td colspan="3" class="final-price">
-                        :
-                    </td>
-                    <td class="final-price">
-                        {{ formatPrice($transaction->change) }}
-                    </td>
-                </tr>
-            </table>
-        </div>
-        <div class="thanks">
-            =====================================
-        </div>
-        <div class="azost" style="margin-top: 5px">
-            TERIMA KASIH<br>
-            ATAS KUNJUNGAN ANDA
-        </div>
+  <div class="content">
+    <!-- Header Toko -->
+    <div class="title">
+      <div>Triananda Fajar Ramadhan</div>
+      <div>Alamat: Desa Gedangalas, Kec. Gajah, Kab. Demak</div>
+      <div>Telp: 0857-9087-9089</div>
     </div>
-</body>
 
+    <div class="separate-line"></div>
+
+    <!-- Info Transaksi -->
+    <table class="transaction-table">
+      <tr><td>TANGGAL</td><td>:</td><td>{{ $transaction->created_at }}</td></tr>
+      <tr><td>FAKTUR</td><td>:</td><td>{{ $transaction->invoice }}</td></tr>
+      <tr><td>KASIR</td><td>:</td><td>{{ $transaction->cashier->name ?? 'N/A' }}</td></tr>
+      <tr><td>PEMBELI</td><td>:</td><td>{{ $transaction->customer->name ?? 'Umum' }}</td></tr>
+    </table>
+
+    <!-- Detail Produk -->
+    <div class="separate-line"></div>
+    <table class="transaction-table">
+      <tr>
+        <td>PRODUK</td>
+        <td class="qty">QTY</td>
+        <td class="final-price" colspan="5">HARGA</td>
+      </tr>
+
+      <tr class="price-tr"><td colspan="9"><div class="separate-line"></div></td></tr>
+
+      @foreach ($transaction->details as $item)
+      <tr>
+        <td>{{ $item->product->title }}</td>
+        <td class="qty">{{ $item->qty }}</td>
+        <td class="final-price" colspan="5">{{ formatPrice($item->price) }}</td>
+      </tr>
+      @endforeach
+
+      <tr class="price-tr"><td colspan="9"><div class="separate-line"></div></td></tr>
+
+      <!-- Ringkasan -->
+      <tr>
+        <td colspan="3" class="final-price">SUB TOTAL</td>
+        <td colspan="3">:</td>
+        <td class="final-price">{{ formatPrice($transaction->grand_total) }}</td>
+      </tr>
+      <tr>
+        <td colspan="3" class="final-price">DISKON</td>
+        <td colspan="3">:</td>
+        <td class="final-price">{{ formatPrice($transaction->discount) }}</td>
+      </tr>
+
+      <tr class="discount-tr"><td colspan="9"><div class="separate-line"></div></td></tr>
+
+      <tr>
+        <td colspan="3" class="final-price">TUNAI</td>
+        <td colspan="3">:</td>
+        <td class="final-price">{{ formatPrice($transaction->cash) }}</td>
+      </tr>
+      <tr>
+        <td colspan="3" class="final-price">KEMBALI</td>
+        <td colspan="3">:</td>
+        <td class="final-price">{{ formatPrice($transaction->change) }}</td>
+      </tr>
+    </table>
+
+    <!-- Footer -->
+    <div class="thanks">=====================================</div>
+    <div class="azost">
+      TERIMA KASIH<br />
+      ATAS KUNJUNGAN ANDA
+    </div>
+  </div>
+</body>
 </html>
