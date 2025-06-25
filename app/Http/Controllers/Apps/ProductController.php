@@ -19,9 +19,12 @@ class ProductController extends Controller
     public function index()
     {
         //get products
-        $products = Product::when(request()->q, function($products) {
-            $products = $products->where('title', 'like', '%'. request()->q . '%');
-        })->latest()->paginate(5);
+        $products = Product::with('category')
+            ->when(request()->q, function($products) {
+                $products = $products->where('title', 'like', '%'. request()->q . '%');
+            })
+            ->latest()
+            ->paginate(5);
 
         //return inertia
         return Inertia::render('Apps/Products/Index', [
