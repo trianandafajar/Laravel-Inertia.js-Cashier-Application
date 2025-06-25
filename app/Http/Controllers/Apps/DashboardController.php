@@ -22,7 +22,7 @@ class DashboardController extends Controller
     public function __invoke(Request $request)
     {
         //day
-        $day    = date('d');
+        $today = \Carbon\Carbon::today();
 
         //week
         $week = Carbon::now()->subDays(7);
@@ -34,25 +34,24 @@ class DashboardController extends Controller
             ->groupBy('date')
             ->get();
 
+        $sales_date = [];
+        $grand_total = [];
         if(count($chart_sales_week)) {
             foreach ($chart_sales_week as $result) {
                 $sales_date[]    = $result->date;
                 $grand_total[]   = (int)$result->grand_total;
             }
-        }else {
-            $sales_date[]   = "";
-            $grand_total[]  = "";
         }
         
 
         //count sales today
-        $count_sales_today = Transaction::whereDay('created_at', $day)->count();
+        $count_sales_today = Transaction::whereDate('created_at', $today)->count();
 
         //sum sales today
-        $sum_sales_today = Transaction::whereDay('created_at', $day)->sum('grand_total');
+        $sum_sales_today = Transaction::whereDate('created_at', $today)->sum('grand_total');
 
         //sum profits today
-        $sum_profits_today = Profit::whereDay('created_at', $day)->sum('total');
+        $sum_profits_today = Profit::whereDate('created_at', $today)->sum('total');
 
         //get product limit stock
         $products_limit_stock = Product::with('category')->where('stock', '<=', 10)->get();
@@ -66,14 +65,13 @@ class DashboardController extends Controller
             ->limit(5)
             ->get();
 
+        $product = [];
+        $total = [];
         if(count($chart_best_products)) {
             foreach ($chart_best_products as $data) {
                 $product[] = $data->title;
                 $total[]   = (int)$data->total;
             }
-        }else {
-            $product[]   = "";
-            $total[]  = "";
         }
 
         return Inertia::render('Apps/Dashboard/Index', [
