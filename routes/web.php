@@ -23,22 +23,27 @@ Route::prefix('apps')->group(function() {
 
         //route resource roles
         Route::resource('/roles', \App\Http\Controllers\Apps\RoleController::class, ['as' => 'apps'])
+            ->only(['index', 'create', 'store', 'edit', 'update', 'destroy'])
             ->middleware('permission:roles.index|roles.create|roles.edit|roles.delete');
 
         //route resource users
         Route::resource('/users', \App\Http\Controllers\Apps\UserController::class, ['as' => 'apps'])
+            ->only(['index', 'create', 'store', 'edit', 'update', 'destroy'])
             ->middleware('permission:users.index|users.create|users.edit|users.delete');
 
         //route resource categories
         Route::resource('/categories', \App\Http\Controllers\Apps\CategoryController::class, ['as' => 'apps'])
+            ->only(['index', 'create', 'store', 'edit', 'update', 'destroy'])
             ->middleware('permission:categories.index|categories.create|categories.edit|categories.delete');    
     
         //route resource products
         Route::resource('/products', \App\Http\Controllers\Apps\ProductController::class, ['as' => 'apps'])
-        ->middleware('permission:products.index|products.create|products.edit|products.delete');
+            ->only(['index', 'create', 'store', 'edit', 'update', 'destroy'])
+            ->middleware('permission:products.index|products.create|products.edit|products.delete');
 
         //route resource customers
         Route::resource('/customers', \App\Http\Controllers\Apps\CustomerController::class, ['as' => 'apps'])
+            ->only(['index', 'create', 'store', 'edit', 'update', 'destroy'])
             ->middleware('permission:customers.index|customers.create|customers.edit|customers.delete');
 
         //route transaction
